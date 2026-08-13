@@ -1,0 +1,19 @@
+{
+  "name": "supply-chain-risk-tracker",
+  "version": "1.0.0",
+  "description": "ESG & Supply Chain Risk Auditor backed by CognoDB",
+  "main": "index.js",
+  "scripts": {
+    "install:all": "npm install && npm install --prefix backend && npm install --prefix frontend",
+    "dev:backend": "node backend/server.js",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "seed": "node backend/seed.js"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2",
+    "dotenv": "^17.4.2",
+    "neo4j-driver": "^6.2.0"
+  },
+  "license": "ISC"
+}
