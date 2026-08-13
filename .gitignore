@@ -25,6 +25,3 @@ build/
 # OS files
 .DS_Store
 Thumbs.db
-
-# Demo videos
-docs/video/
