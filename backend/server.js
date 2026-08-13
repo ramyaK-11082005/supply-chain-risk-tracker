@@ -1,4 +1,5 @@
 import express from 'express';
+import path from 'path';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { verifyConnection, runQuery } from './db.js';
@@ -20,6 +21,8 @@ const parseNum = (val) => {
   }
   return Number(val);
 };
+
+// ==================== API ROUTES ====================
 
 // 1. Health & Connection Status
 app.get('/api/health', async (req, res) => {
@@ -73,7 +76,7 @@ app.get('/api/products', async (req, res) => {
   }
 });
 
-// 3b. Add a New Product (Fixes product creation issues)
+// 3b. Add a New Product
 app.post('/api/products', async (req, res) => {
   try {
     const { id, name, price, category, sku, description } = req.body;
@@ -338,6 +341,19 @@ app.get('/api/products/:id/alternatives', async (req, res) => {
     res.status(500).json({ status: 'error', message: 'Failed to retrieve alternatives: ' + error.message });
   }
 });
+
+// ==================== STATIC FRONTEND SERVING ====================
+
+const __dirname = path.resolve();
+// Serves static files from the frontend build folder
+app.use(express.static(path.join(__dirname, 'frontend/dist')));
+
+// Fallback to index.html using regex pattern instead of bare '*'
+app.get(/.*/, (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend/dist', 'index.html'));
+});
+
+// ==================== START SERVER ====================
 
 app.listen(PORT, () => {
   console.log(`🚀 Express server running on port ${PORT}`);
