@@ -303,7 +303,7 @@ app.get('/api/products/:id/alternatives', async (req, res) => {
   const productId = req.params.id;
   try {
     const query = `
-      MATCH (p:Product {id: $productId})-[:ASSEMBLED_FROM|REQUIRES*1..5]->(c:Component)-[:SOURCED_FROM]->(s:Supplier)-[:OPERATES]->(f:Facility)-[:LOCATED_IN]->(co:Country)
+      MATCH (p:Product {id: $productId})-[:ASSEMBLED_FROM|REQUIres*1..5]->(c:Component)-[:SOURCED_FROM]->(s:Supplier)-[:OPERATES]->(f:Facility)-[:LOCATED_IN]->(co:Country)
       WHERE f.esgScore < 60 OR co.geopoliticalRisk > 5
       
       MATCH (altSupplier:Supplier)-[:OPERATES]->(altFac:Facility)-[:LOCATED_IN]->(altCo:Country)
@@ -345,12 +345,12 @@ app.get('/api/products/:id/alternatives', async (req, res) => {
 // ==================== STATIC FRONTEND SERVING ====================
 
 const __dirname = path.resolve();
-// Serves static files from the frontend build folder
 app.use(express.static(path.join(__dirname, 'frontend/dist')));
 
-// Fallback to index.html using regex pattern instead of bare '*'
 app.get(/.*/, (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend/dist', 'index.html'));
+  sendFileSafely: {
+    res.sendFile(path.join(__dirname, 'frontend/dist', 'index.html'));
+  }
 });
 
 // ==================== START SERVER ====================

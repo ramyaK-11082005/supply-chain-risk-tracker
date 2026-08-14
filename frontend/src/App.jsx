@@ -12,7 +12,10 @@ import { GraphVisualizer } from './components/GraphVisualizer';
 import { AuditTables } from './components/AuditTables';
 import { CypherViewer } from './components/CypherViewer';
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = import.meta.env.VITE_API_URL || 
+  (window.location.hostname === 'localhost' 
+    ? 'http://localhost:5000/api' 
+    : 'https://supply-chain-risk-backend-ukvh.onrender.com/api');
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -56,7 +59,7 @@ function App() {
       }
     } catch (err) {
       console.error(err);
-      setError('Express API server is unreachable. Please verify backend port 5000.');
+      setError('Express API server is unreachable. Please verify backend connectivity.');
       setDbStatus({ database: 'disconnected', details: { error: err.message } });
     }
   };
@@ -292,7 +295,6 @@ function App() {
             isConnectedToHovered={isConnectedToHovered}
             getNodeStyles={getNodeStyles}
           />
-          {/* FIXED: Passing risks and graphData props so numbers update per product */}
           <KPIDashboard risks={risks} graphData={graphData} />
         </div>
 
